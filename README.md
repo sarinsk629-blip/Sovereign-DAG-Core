@@ -1,19 +1,22 @@
-# Sovereign DAG Core (Alpha Mainnet)
+# Sovereign DAG Core Engine (V2.0 Master Upgrade)
 
-Sovereign DAG is a zero-gas, blockless Layer-0 network architecture. It replaces sequential block validation with directed acyclic graph (DAG) routing combined with native algorithmic state transitions.
+Welcome to the official repository for the Sovereign Core Architecture. This project represents a cryptographically secure, high-performance transactional asset engine running on an advanced Python stack.
 
-**No ICO. No Presale. No VC Allocation. No Premine.**
+## 📐 Current Architectural Topology
 
-This repository contains the lightweight node client. By running this client, operators process the V8.3 automated routing parameters, stress-testing the network's edge routing under distributed load. Node operators who actively process network state transitions are natively rewarded in SOV.
+The project is currently configured as a **Secure Centralized Ledger API Backend with Remote Client Telemetry**. This setup enables active testing of transactional validation math, custom tokens, and constant product pricing invariants before expanding into decentralized P2P cluster syncing.
 
-### Hardware Requirements
-* **CPU:** 2 Cores (Minimum)
-* **RAM:** 4GB (8GB Recommended for high-frequency state routing)
-* **OS:** Linux (Ubuntu 20.04+), Windows 10/11, macOS
+### 🧠 Core Features Implemented
+* **True Cryptographic Security**: Complete signature verification using the ECDSA protocol over the standard `SECP256k1` curve.
+* **Automated Liquidity Pricing Engine**: Built-in Automated Market Maker (AMM) capabilities within the core asset bridge.
+* **SRC-20 Token Protocol**: Integrated token minting layers featuring systemic token burning functions.
+* **Persistent Local State Storage**: Full read/write state engine syncing directly to disk via secure JSON database states.
 
-### Quick Start
-1. Download the latest binary release from the Releases tab.
-2. Initialize the node: `./sovereign-node init`
-3. Start the routing engine: `./sovereign-node start --engine v8.3`
+---
 
-*Note: This is an Alpha release. The network is currently unlisted and the native asset has $0 fiat value. You are mining purely for state transition rewards prior to the mainnet EVM bridge deployment.*
+## 📂 Repository File Index
+
+* `/backend/dag_api.py`: The master Flask application layer controlling state mutations and cryptographic validation.
+* `/cmd/sovereign-node/main.py`: The user-facing terminal interface designed to pull live network state telemetry from the running API gateway over HTTP.
+
+Note: *The legacy V8.3 simulated routing loop has been deprecated and replaced with live V2.0 HTTP gateway tracking.*
