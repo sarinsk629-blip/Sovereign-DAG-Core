@@ -1,0 +1,10 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore Local Node State & Ledgers
+*.json
+*.log
+
+# Ignore Virtual Environments
+venv/
