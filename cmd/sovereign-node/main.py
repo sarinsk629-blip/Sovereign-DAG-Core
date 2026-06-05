@@ -17,9 +17,9 @@ def mainnet_boot():
     print("\033[93m[REQUIRED]\033[0m Enter your Sovereign/EVM Public Wallet Address to receive real SOV rewards:")
     user_wallet = input(">> ").strip()
     
-        # Allow addresses starting with either 'SOV' or '0x'
-    if not (user_wallet.startswith("SOV") or user_wallet.startswith("0x")) or len(user_wallet) < 10:
-        print("\033[91m[ERROR] Invalid public address structure. Restarting node...\033[0m")
+        # Force native SOV validation check
+    if not user_wallet.startswith("SOV") or len(user_wallet) < 10:
+        print("\033[91m[ERROR] Invalid native SOV public address structure. Restarting node...\033[0m")
         sys.exit(1)
 
     log_status("MAINNET", f"Target payout address locked: {user_wallet}")
