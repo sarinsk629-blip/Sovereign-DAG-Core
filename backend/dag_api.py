@@ -80,7 +80,7 @@ def faucet(wallet):
     save_ledger_state(network_state)
     return jsonify({"status": "SUCCESS", "message": "1.0 SOV Dispensed.", "txid": txid})
 
-# --- LAYER-0: PEER-TO-PEER TRANSFER ---
+# --- LAYER-0: PEER-TO-PEER TRANSFER (ECDSA SECURED) ---
 @app.route('/transfer', methods=['POST'])
 def transfer():
     data = request.json
@@ -88,22 +88,31 @@ def transfer():
     recipient = data.get('recipient')
     amount = float(data.get('amount'))
     ticker = data.get('ticker', 'SOV')
+    public_key = data.get('public_key')
+    signature = data.get('signature')
 
+    # 1. MATHEMATICAL VERIFICATION: Prevent unauthorized drains
+    tx_data = {"sender": sender, "recipient": recipient, "amount": amount, "ticker": ticker}
+    if not verify_signature(public_key, signature, tx_data):
+        return jsonify({"status": "FAILED", "reason": "SECURITY ALERT: Cryptographic Signature Invalid."}), 401
+
+    # 2. STATE VALIDATION: Ensure sender exists and has funds
+    if sender not in network_state or network_state.get(sender, {}).get(ticker, 0.0) < amount:
+        return jsonify({"status": "FAILED", "reason": f"Insufficient {ticker} balance."}), 400
+
+    # 3. LEDGER MUTATION
     if recipient not in network_state:
         network_state[recipient] = {}
     if ticker not in network_state[recipient]:
         network_state[recipient][ticker] = 0.0
 
-    sender_balance = network_state.get(sender, {}).get(ticker, 0.0)
-    if sender_balance < amount:
-        return jsonify({"status": "FAILED", "reason": f"Insufficient {ticker} balance."}), 400
-
     network_state[sender][ticker] -= amount
     network_state[recipient][ticker] += amount
 
-    txid = generate_txid("TRANSFER", sender, amount, data.get('signature', 'SIG_VERIFIED'))
+    # 4. FINALIZATION
+    txid = generate_txid("TRANSFER", sender, amount, signature)
     save_ledger_state(network_state)
-    log_transaction(txid, {"type": "TRANSFER", "sender": sender, "recipient": recipient, "amount": amount, "ticker": ticker})
+    log_transaction(txid, tx_data)
 
     return jsonify({"status": "SUCCESS", "message": f"Successfully sent {amount} {ticker}!", "txid": txid})
 
